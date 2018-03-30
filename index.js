@@ -1,16 +1,14 @@
 'use strict';
 
-let util = require('util')
-let exec = util.promisify(require('child_process').exec)
+let exec = require('child_process').execSync
 
-let run = async function(cmd) {
-    let {stdout} = await exec(cmd)
-    return stdout.trim()
+let run = function(cmd) {
+    return exec(cmd).toString().trim()
 }
 
-let getlog = async function() {
+let getlog = function() {
     let params = ['%H', '%cn', '%ce', '%cI', '%s', '%b']
-    let r = (await run('git log -1 --pretty=format:' + params.join('%x00')))
+    let r = run('git log -1 --pretty=format:' + params.join('%x00'))
 	.split('\0')
     return {
 	hash: r[0],
@@ -24,22 +22,43 @@ let getlog = async function() {
     }
 }
 
-let _git = async function() {
+let _git = function() {
     return {
-	ref: await run('git rev-parse --abbrev-ref HEAD'),
-	dirty: (await run('git status --porcelain')) !== '',
-	log: await getlog()
+	ref: run('git rev-parse --abbrev-ref HEAD'),
+	dirty: run('git status --porcelain') !== '',
+	log: getlog()
     }
 }
 
-let git = async function() {	// memoisation
+let git = function() {	// memoisation
     let r
-    return async () => r ? r : (r = await _git())
+    return () => r ? r : (r = _git())
 }
 
-let main = async function() {
-    let git_log_1 = await git()
-    console.log(await git_log_1())
-}
+let mark = /^babel-plugin-git-log-1\b/
 
-main()
+module.exports = function({types: t}) {
+    return {
+	pre() {
+	    this.git = git()
+	},
+	visitor: {
+	    CallExpression(path, state) {
+		if (path.scope.parent && !state.opts.inner_scope) return
+
+		let node = path.node
+		if (!(t.isIdentifier(node.callee, { name: 'require' })
+		      && t.isLiteral(node.arguments[0])
+		      && mark.test(node.arguments[0].value))) return
+
+		let json
+		try {
+		    json = this.git()
+		} catch (e) {
+		    throw path.buildCodeFrameError(e.message)
+		}
+		path.replaceWith(t.expressionStatement(t.valueToNode(json)))
+	    }
+	}
+    }
+}
