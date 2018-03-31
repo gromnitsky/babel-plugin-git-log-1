@@ -7,6 +7,6 @@ process.env.GIT_DIR = process.env.GIT_WORK_TREE + '/dotgit'
 
 pluginTester({
     plugin: plugin,
-    pluginName: 'babal-plugin-git-log-1',
+    pluginName: 'babel-plugin-git-log-1',
     fixtures: __dirname + '/fixtures'
 })
