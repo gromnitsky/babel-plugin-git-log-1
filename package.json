@@ -1,0 +1,17 @@
+{
+    "name": "babal-plugin-git-log-1",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "keywords": [
+        "babel-plugin",
+        "git",
+        "commit"
+    ],
+    "author": "AG",
+    "license": "MIT",
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-plugin-tester": "^5.0.0"
+    }
+}
