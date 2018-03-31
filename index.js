@@ -6,9 +6,9 @@ let run = function(cmd) {
     return exec(cmd).toString().trim()
 }
 
-let getlog = function() {
+let getlog = function(rev) {
     let params = ['%H', '%cn', '%ce', '%cI', '%s', '%b']
-    let r = run('git log -1 --pretty=format:' + params.join('%x00'))
+    let r = run(`git log -1 --pretty=format:${params.join('%x00')} ${rev}`)
 	.split('\0')
     return {
 	hash: r[0],
@@ -22,17 +22,17 @@ let getlog = function() {
     }
 }
 
-let _git = function() {
+let _git = function(rev = 'HEAD') {
     return {
-	ref: run('git rev-parse --abbrev-ref HEAD'),
+	ref: run(`git rev-parse --abbrev-ref ${rev}`),
 	dirty: run('git status --porcelain') !== '',
-	log: getlog()
+	log: getlog(rev)
     }
 }
 
-let git = function() {	// memoisation
+let git = function() {		// memoisation
     let r
-    return () => r ? r : (r = _git())
+    return (rev) => r ? r : (r = _git(rev))
 }
 
 let mark = /^babel-plugin-git-log-1\b/
@@ -53,7 +53,7 @@ module.exports = function({types: t}) {
 
 		let json
 		try {
-		    json = this.git()
+		    json = this.git(state.opts.rev)
 		} catch (e) {
 		    throw path.buildCodeFrameError(e.message)
 		}

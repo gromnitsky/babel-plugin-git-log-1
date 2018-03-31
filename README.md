@@ -6,12 +6,12 @@ Handy for embedding the relevant data from git into deployed web apps.
 
 If you add
 
-    let log = require('babel-plugin-git-log-1)
+    let git = require('babel-plugin-git-log-1')
 
 the plugin transforms the line to:
 
 ~~~
-let log = {
+let git = {
     ref: 'master',
     dirty: false,
     log: {
@@ -40,7 +40,7 @@ modules, so this won't work:
 
 ~~~
 function hello() {
-    let log = require('babel-plugin-git-log-1)
+    let git = require('babel-plugin-git-log-1)
 }
 ~~~
 
@@ -57,6 +57,9 @@ plugin via `.babelrc`:
 }
 
 ~~~
+
+By default, the plugin operates on `HEAD`. To use another commit
+object, use `ref` option.
 
 ## Bugs
 
