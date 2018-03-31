@@ -1,17 +1,21 @@
 {
-    "name": "babal-plugin-git-log-1",
+    "name": "babel-plugin-git-log-1",
     "version": "0.0.1",
-    "description": "",
+    "description": "Babel plugin for inlining values from the last git commit",
     "main": "index.js",
     "keywords": [
         "babel-plugin",
         "git",
         "commit"
     ],
-    "author": "AG",
+    "author": "Alexander Gromnitsky <alexander.gromnitsky@gmail.com>",
     "license": "MIT",
+    "repository": "github:gromnitsky/babel-plugin-git-log-1",
     "devDependencies": {
         "babel-core": "^6.26.0",
         "babel-plugin-tester": "^5.0.0"
+    },
+    "scripts": {
+        "test": "mocha"
     }
 }
