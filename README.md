@@ -59,7 +59,7 @@ plugin via `.babelrc`:
 ~~~
 
 By default, the plugin operates on `HEAD`. To use another commit
-object, use `ref` option.
+object, use `rev` option.
 
 ## Bugs
 
