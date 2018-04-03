@@ -1,6 +1,6 @@
 {
     "name": "babel-plugin-git-log-1",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Babel plugin for inlining values from the last git commit",
     "main": "index.js",
     "keywords": [
@@ -17,5 +17,6 @@
     },
     "scripts": {
         "test": "mocha"
-    }
+    },
+    "files": ["index.js"]
 }
